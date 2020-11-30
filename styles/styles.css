@@ -1,0 +1,72 @@
+/* Qr scanner page */
+
+.scanner{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scanner .cam_view{
+    background-color: burlywood;
+}
+
+
+/* room creator page */
+
+.creator{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.creator input{
+    width: 300px;
+}
+
+/* room entry page */
+
+.entry{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.entry input{
+    width: 300px;
+}
+
+
+/* room page */
+
+.room{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* menu page */
+
+.menu{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* dish page */
+
+.dish{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* payment page */
+
+.payment{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
