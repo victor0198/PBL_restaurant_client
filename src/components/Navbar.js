@@ -1,5 +1,6 @@
 import {Button} from 'antd'
 import {UserOutlined, ScanOutlined, ShopOutlined} from '@ant-design/icons'
+import Link from 'next/link'
 
 const Navbar = () => {
   return (
@@ -8,10 +9,14 @@ const Navbar = () => {
             <UserOutlined className="icon"/>
         </div>
         <div className="icon_div">
+          <Link href="/scan">
             <ScanOutlined className="icon"/>
+          </Link>
         </div>
         <div className="icon_div">
+          <Link href="/restaurants">
             <ShopOutlined className="icon"/>
+          </Link>
         </div>
     </div>
   )
