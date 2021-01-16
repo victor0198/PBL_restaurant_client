@@ -2,82 +2,92 @@ import {Button} from 'antd'
 import {LeftOutlined} from '@ant-design/icons'
 import Navbar from '../../../components/Navbar'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import {useAppContext} from '../../../components/UserInfo'
+import Router from 'next/router'
 
 const Menu = () => {
+  const axios = require('axios');
+  const [categoriesMap, setCategoriesMap] = useState(new Map());
+  const [dishes, setDishes] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [message, setMessage] = useState("Loading..");
+  const {status,UID,restaurant,restaurantName, setRestaurantName} = useAppContext();
+
+  useEffect(()=>{
+    console.log("UID:" + UID);
+    console.log("status:" + status);
+    console.log("restaurant" + restaurant);
+    if(restaurant=="initial"){
+      Router.push('/restaurants');
+    }
+    
+    axios.post('http://localhost:3000/api/menu',
+    {
+      "restaurantId": restaurant
+    })
+    .then(function (response) {
+      setDishes(response.data.restaurant.menu);
+      setRestaurantName(response.data.restaurant.title);
+      console.log(response);
+      if(response.data.restaurant.menu.length == 0){
+        setMessage("There is no dish in the menu");
+      }
+    })
+    .catch(function (error) {
+      console.log(error); 
+    })
+    .then(function () {
+    });
+  },[]);
+
+  useEffect(()=>{
+    let catMap = new Map();
+    for(let i=0; i<dishes.length; i++){
+      if(catMap.has(dishes[i].description))
+      catMap.set(dishes[i].description, catMap.get(dishes[i].description)+1 );
+      else
+      catMap.set(dishes[i].description, 1);
+    }
+    let cat = Array();
+    catMap.forEach((values, keys) => {
+      cat.push(keys);
+    });
+    setCategories(cat);
+    setCategoriesMap(catMap);
+  }, [dishes]);
+
   return (
     <>
       <div className="menu">
         <div className="header">
-          <Button>
-            <LeftOutlined />
-          </Button>
-          <p>Oliva's menu</p>
-        </div>
-        <div className="c_list">
-          <Link href="/restaurants/oliva/pizzas">
-            <Button className="m_c">
-                <div className="overlay">
-                  <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.-8_NHkki_nkuTJ5AQg9-2QHaDF%26pid%3DApi&f=1"></img>
-                </div>
-                <div className="info">
-                  <p className="name">Pizzas</p>
-                  <p className="nr_items">12 items</p>
-                </div>
+          <Link href={status == "booking"?"/":"/restaurants/"}>
+            <Button>
+              <LeftOutlined />
             </Button>
           </Link>
-          <Button className="m_c">
-              <div className="overlay">
-              <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.familyfoodonthetable.com%2Fwp-content%2Fuploads%2F2015%2F05%2FColorful-marinated-veggie-salad.png&f=1&nofb=1"></img>
-              </div>
-              
-              <div className="info">
-                <p className="name">Salads</p>
-                <p className="nr_items">5 items</p>
-              </div>
-          </Button>
-          <Button className="m_c">
-              <div className="overlay">
-                <img src="http://www.simplesweetsavory.com/wp-content/uploads/2017/05/Teriyaki-Marinated-Steak-side-1024x678.jpg"></img>
-              </div>
-              
-              <div className="info">
-                <p className="name">Steak</p>
-                <p className="nr_items">5 items</p>
-              </div>
-          </Button>
-
-
-
-          <Button className="m_c">
-              <div className="overlay">
-                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.-8_NHkki_nkuTJ5AQg9-2QHaDF%26pid%3DApi&f=1"></img>
-              </div>
-              <div className="info">
-                <p className="name">Pizzas</p>
-                <p className="nr_items">12 items</p>
-              </div>
-          </Button>
-          <Button className="m_c">
-              <div className="overlay">
-              <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.familyfoodonthetable.com%2Fwp-content%2Fuploads%2F2015%2F05%2FColorful-marinated-veggie-salad.png&f=1&nofb=1"></img>
-              </div>
-              
-              <div className="info">
-                <p className="name">Salads</p>
-                <p className="nr_items">5 items</p>
-              </div>
-          </Button>
-          <Button className="m_c">
-              <div className="overlay">
-                <img src="http://www.simplesweetsavory.com/wp-content/uploads/2017/05/Teriyaki-Marinated-Steak-side-1024x678.jpg"></img>
-              </div>
-              
-              <div className="info">
-                <p className="name">Steak</p>
-                <p className="nr_items">5 items</p>
-              </div>
-          </Button>
-
+          <div className="shop">
+            <p>{restaurantName}'s menu</p>
+          </div>
+        </div>
+        <div className="c_list">
+          {categoriesMap.size == 0 && <p>{message}</p>}
+          {categoriesMap.size > 0 &&
+            categories.map(x=> {
+            return (
+                <Link key={x} href={"/restaurants/" + restaurant + "/" + x}>
+                  <Button className="m_c">
+                      <div className="overlay">
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.-8_NHkki_nkuTJ5AQg9-2QHaDF%26pid%3DApi&f=1"></img>
+                      </div>
+                      <div className="info">
+                        <p className="name">{x}</p>
+                        <p className="nr_items">{categoriesMap.get(x)} items</p>
+                      </div>
+                  </Button>
+                </Link>);
+            })
+          }
 
         </div>
         
