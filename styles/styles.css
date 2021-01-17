@@ -564,15 +564,20 @@
 }
 
 .header .shop{
-    width: calc(100vw - 75px);
+    width: calc(100vw - 63px);
     display: flex;
     justify-content: space-between;
+}
+
+.header .shop .booking_btn{
+    margin-right: 15px;
 }
 
 .header .shop button{
     font-size: 20px;
     height: 32px;
-    background-color: #FFD545;
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
     border-radius: 9px;
     padding: 0px;
     width: 40px;
@@ -902,4 +907,115 @@
 .delete_dish svg{
     width: 23px;
     height: 23px;
+}
+
+.pick_date{
+    display: flex;
+}
+
+.pick_date p{
+    margin: 3px 10px 0px 0px;
+}
+
+.pick_table{
+    width: calc(100%);
+    margin-top: 15px;
+    max-height: 40vh;
+    overflow: scroll;
+}
+
+.pick_table li.ant-menu-item{
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+    height: 55px;
+}
+
+.pick_table ul{
+    border: none;
+}
+
+.pick_table .item{
+    height: 55px;
+    width: 100%;
+    display: flex;
+    margin-bottom: 5px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.item .table_img img{
+    width: 34px;
+    height: 34px;
+    margin: 3px 10px 3px 3px;
+}
+
+.selected_item{
+    background-color: #ea9a02;
+}
+
+.profile_content{
+    position: relative;
+    top: -15px;
+    background-color: white;
+    height: calc(100vh - 246px);
+    border-radius: 20px 20px 0px 0px;
+    width: 100%;
+    overflow: scroll;
+    padding: 15px 15px 0px 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile_content img{
+    width: 100%;
+    margin-top: 10px;
+}
+
+.profile_content .p_option{
+    border: 1px solid #eee;
+    border-radius: 15px;
+    padding: 5px 10px 8px 10px;
+    box-shadow: 0px 1px 8px -2px #999;
+    margin-bottom: 15px;
+}
+
+.profile_content .p_option p{
+    margin: 0;
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+.profile_content .p_option div{
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    color: black;
+}
+
+.profile_content input{
+    padding: 0px;
+    height: 24px;
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+.special{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+
+.special div{
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+}
+
+.special div p{
+    margin: 0;
+}
+
+.special div p.time{
+    font-weight: bold;
 }

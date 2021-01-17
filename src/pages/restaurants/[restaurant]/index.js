@@ -1,18 +1,21 @@
-import {Button} from 'antd'
-import {LeftOutlined} from '@ant-design/icons'
+import {Button, Dropdown, Menu, Modal, DatePicker, message} from 'antd'
+import {LeftOutlined, AlignRightOutlined, BellOutlined, CalendarOutlined, StarOutlined} from '@ant-design/icons'
 import Navbar from '../../../components/Navbar'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import {useAppContext} from '../../../components/UserInfo'
 import Router from 'next/router'
 
-const Menu = () => {
+const RMenu = () => {
   const axios = require('axios');
   const [categoriesMap, setCategoriesMap] = useState(new Map());
   const [dishes, setDishes] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [message, setMessage] = useState("Loading..");
-  const {status,UID,restaurant,restaurantName, setRestaurantName} = useAppContext();
+  const [messageState, setMessage] = useState("Loading..");
+  const {status,UID,restaurant,restaurantName, setRestaurantName, loaded} = useAppContext();
+  const [follow, setFollow] = useState(true);
+  const [choosedTable, setChoosedTable] = useState(0);
+  const [bookingDate, setBokingDate] = useState(null);
 
   useEffect(()=>{
     console.log("UID:" + UID);
@@ -57,6 +60,81 @@ const Menu = () => {
     setCategoriesMap(catMap);
   }, [dishes]);
 
+  function handleMenuClick(e) {
+    console.log('click', e.key);
+    if(e.key == 1){
+      if(loaded){
+        loadTables();
+        setIsModalVisible(true);
+      }
+    }
+
+    if(e.key == 2){
+      setFollow(!follow);
+    }
+  }
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="1">
+        <CalendarOutlined />
+        Book table
+      </Menu.Item>
+      <Menu.Item key="2">
+        {
+          follow?
+          <>
+            <BellOutlined style={{color:"red"}}/>Unfollow
+          </>:
+          <>
+            <BellOutlined />Follow
+          </>
+        }
+        
+      </Menu.Item>
+      <Menu.Item>
+        <StarOutlined style={{color:"#f2b90b"}} />Rate
+      </Menu.Item>
+    </Menu>
+  );
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const handleOk = () => {
+    setIsModalVisible(false);
+    setBokingDate(null);
+    message.success('Booking request sent');
+  };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setBokingDate(null);
+  };
+
+  function onChange(date, dateString) {
+    console.log(date, dateString);
+    setBokingDate(dateString);
+  }
+
+  const [room, setRoom] = useState([]);
+  const loadTables = () =>{
+    axios.post('http://localhost:3000/api/menu',
+    {
+      "restaurantId": restaurant
+    })
+    .then(function (response) {
+        setRoom(response.data.restaurant.room);
+        console.log(response.data.restaurant.room);
+    })
+    .catch(function (error) {
+        console.log(error); 
+    })
+    .then(function () {
+    });
+  }
+
+  function chooseTable(e) {
+    console.log('click', e.key);
+    setChoosedTable(e.key);
+  }
+
   return (
     <>
       <div className="menu">
@@ -67,11 +145,49 @@ const Menu = () => {
             </Button>
           </Link>
           <div className="shop">
-            <p>{restaurantName}'s menu</p>
+            <p>{restaurantName}</p>
+            <Dropdown overlay={menu}>
+              <Button className="booking_btn">
+               <AlignRightOutlined />
+              </Button>
+            </Dropdown>
           </div>
         </div>
         <div className="c_list">
-          {categoriesMap.size == 0 && <p>{message}</p>}
+
+          <Modal title="Booking" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <div className="pick_date">
+              <p>Date</p>
+              <DatePicker id="datepicker" onChange={onChange}/>
+            </div>
+            <div className="pick_table">
+              <Menu onClick={chooseTable}>
+                {
+                  room.length > 0 &&
+                  room.map((x, idx)=> {
+                    if (!x.booked)
+                      return (
+                      <Menu.Item
+                        key={idx+1} 
+                      >
+                        <div className={`item${choosedTable == (idx+1)? " selected_item" : ""}`}>
+                          <div className="table_img">
+                              <img src="/tablef.jpg" width={50} height={50}/>
+                          </div>
+                          <div className="item_description">
+                              <p className="name">TABLE {idx+1}</p>
+                          </div>
+                        </div>
+                      </Menu.Item> 
+                      )
+                    }
+                  )
+                }
+              </Menu>
+            </div>
+          </Modal>
+
+          {categoriesMap.size == 0 && <p>{messageState}</p>}
           {categoriesMap.size > 0 &&
             categories.map(x=> {
             return (
@@ -97,4 +213,4 @@ const Menu = () => {
   )
 }
 
-export default Menu;
+export default RMenu;

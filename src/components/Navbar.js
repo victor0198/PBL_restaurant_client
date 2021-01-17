@@ -22,7 +22,7 @@ const Navbar = () => {
   return (
     <div className="navbar">
         <div className="icon_div">
-          <Link href="/">
+          <Link href="/profile">
             <UserOutlined className="icon"/>
           </Link>
         </div>
