@@ -194,7 +194,18 @@ const RMenu = () => {
                 <Link key={x} href={"/restaurants/" + restaurant + "/" + x}>
                   <Button className="m_c">
                       <div className="overlay">
-                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.-8_NHkki_nkuTJ5AQg9-2QHaDF%26pid%3DApi&f=1"></img>
+                        {x=="Pizza"?
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.rxbAldJR60tyZrqtX35nMwHaEh%26pid%3DApi&f=1"></img>
+                        :<></>}
+                        {x=="Drinks"?
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.1a8QKmlddsozDwVa_da-kQHaEo%26pid%3DApi&f=1"></img>
+                        :<></>}
+                        {x=="Meat and fish"?
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.BWzILZm-vdJ5neGL1Q0K-gHaE8%26pid%3DApi&f=1"></img>
+                        :<></>}
+                        {x=="Salads"?
+                        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.aYMF6RS9W935pO3WyoaihQHaE8%26pid%3DApi&f=1"></img>
+                        :<></>}
                       </div>
                       <div className="info">
                         <p className="name">{x}</p>

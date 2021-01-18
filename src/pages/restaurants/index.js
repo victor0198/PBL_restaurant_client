@@ -14,6 +14,7 @@ const Restaurant = () => {
   useEffect(()=>{
     console.log("res:" + restaurant);
     console.log("sta:" + status);
+    console.log(token);
     if(restaurant!="initial" && status=="booking"){
         Router.push("/restaurants/" + restaurant);
     }
@@ -70,8 +71,8 @@ const Restaurant = () => {
         <div className="restaurants">
 
             {restaurants && (restaurants.length > 0) && 
-            restaurants.map((restaurant) => (
-                restaurant.title!="Res1" && restaurant.title!="Res2" &&
+            restaurants.map((restaurant, idx) => (
+                restaurant.title!="First restaurant" &&
                 <Button className="item" key={restaurant._id} onClick={e=>{redirectTo(restaurant._id, restaurant.title)}}>
                     <div className="item_content">
                         <div className="img_div">
@@ -79,10 +80,11 @@ const Restaurant = () => {
                         </div>
                         <div className="item_description">
                             <p className="name">{restaurant.title}</p>
-                            <p className="address">bd. Decebal, 139</p>
+                            {idx==1 && <p className="address">bd. Decebal, 139</p>}
+                            {idx==2 && <p className="address">bd. Moscova, 210</p>}
                             <div className="rating">
                                 <StarOutlined className="marked"/>
-                                <p>4.8 (5 votes)</p>
+                                <p>{2.8 + idx*1.1} ({10-idx*2} votes)</p>
                             </div>
                         </div>
                     </div>

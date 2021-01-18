@@ -18,16 +18,16 @@ const Sign = () => {
   const [form] = Form.useForm();
 
   const onFinish = values => {
-    axios.post('http://localhost:3000/login',
+    axios.post('http://localhost:3000/register',
     {
+      "name": form.getFieldValue("name"),
       "email": form.getFieldValue("email"),
       "password": form.getFieldValue("password")
     })
     .then(function (response) {
       // handle success
-      setToken(response.data);
-      setStatus("logged");
-      Router.push('/scan');
+      console.log(response);
+      Router.push('/start/log');
     })
     .catch(function (error) {
       // handle error
@@ -58,6 +58,16 @@ const Sign = () => {
       onFinishFailed={onFinishFailed}
     >
       
+      <div className="inp">
+        <Form.Item
+          label="Name"
+          name="name"
+          rules={[{ required: true, message: 'Please input your name!' }]}
+        >
+          <Input type="name" />
+        </Form.Item>
+      </div>
+
       <div className="inp">
         <Form.Item
           label="Email"
