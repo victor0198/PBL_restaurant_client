@@ -4,12 +4,43 @@ import Navbar from '../../components/Navbar'
 import { useState } from 'react'
 import Link from 'next/link'
 import {useAppContext} from '../../components/UserInfo'
-
+import Router from 'next/router'
 
 const Payment = () => {
+  const axios = require('axios');
   const [paymentType, setPaymentType] = useState("card");
-  const {tableTotal, usersOnTable} = useAppContext();
+  const {tableTotal, usersOnTable, restaurant, table, dishList, token} = useAppContext();
 
+  const order_it = () => {
+    
+    const amounts = [];
+    const dishListID = dishList.map(obj => (obj._id));
+    console.log(dishListID);
+    for (let i = 0; i < dishListID.length; i++) {
+      amounts.push(1);
+    } 
+    console.log(amounts);
+    axios.post('http://localhost:3000/api/order/push',
+    {
+      "restaurantId": restaurant,
+      "tableRoomId": table,
+      "menuElementIds": dishListID,
+      "menuElementCount": amounts
+    },
+    {
+        headers: {"auth-token": `${token}`}
+    })
+    .then(function (response) {
+        console.log(response.data);
+        // Router.push("/thanks");
+    })
+    .catch(function (error) {
+        console.log(error); 
+    })
+    .then(function () {
+    });
+    
+  }
 
   return (
     <>
@@ -51,7 +82,7 @@ const Payment = () => {
           :
           <>
             <div className="pay_options">
-              <Button className="space_btn">SEND ORDER</Button>
+              <Button className="space_btn" onClick={order_it}>SEND ORDER</Button>
             </div>
           </>
         }
